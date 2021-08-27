@@ -1,0 +1,7 @@
+__pycache__
+venv
+config.ini
+*.log
+*.pickle
+*.sh
+*.txt
