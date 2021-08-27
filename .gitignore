@@ -1,7 +1,8 @@
+.idea
 __pycache__
 venv
 config.ini
 *.log
 *.pickle
 *.sh
-*.txt
+processes.txt

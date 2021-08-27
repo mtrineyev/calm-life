@@ -55,7 +55,7 @@ class ActiveProcesses:
         current_processes = dict()
         returned_value = system(self.processes_list)
         if returned_value:
-            logging.warning(f'Processes list terminated with error {returned_value}')
+            logging.warning(f'Processes list terminated with error {returned_value}.')
             return returned_value
         with open(self.proc_file, 'r') as f:
             processes = f.readlines()
@@ -76,8 +76,9 @@ class ActiveProcesses:
             if value >= self.seen_times:
                 returned_value = system(f'{self.kill_command} {key}')
                 if returned_value:
-                    logging.error(f'Can\'t kill PID {key}')
+                    logging.error(f'Can\'t kill PID {key}.')
                 else:
+                    logging.warning(f'Killed process with PID {key}.')
                     self.seen_processes[key] = 0
         self.seen_processes = {k: v for k, v in self.seen_processes.items() if v}
         return
