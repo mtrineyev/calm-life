@@ -27,7 +27,7 @@ The Python script for killing the hanged scrapy processes.
 
 
 ## To test the script
-`cd /home/USER/calm-life`, run `calm-life.sh` and check the file `processes.txt`
+`cd /home/USER/calm-life`, run `calm-life.sh` then run the `seen_processes.py` script to see list of the seen processes.
 
 
 ## The licence

@@ -1,4 +1,8 @@
 [Main]
+# File for saving the current processes
+PROC_FILE = 'processes.txt'
+# File for saving the seen processes
+PICKLE_FILE = 'processes.pickle'
 # OS command to show active processes
 PROCESSES_LIST = ps -u user_name
 # Name of the looking process

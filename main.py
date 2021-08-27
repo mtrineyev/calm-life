@@ -26,8 +26,8 @@ class ActiveProcesses:
     Get list of the currently running scrapy jobs (aka 'processes')
     and terminate old hanging ones
     """
-    proc_file = 'processes.txt'
-    pickle_file = 'processes.pickle'
+    proc_file = config['Main']['PROC_FILE']
+    pickle_file = config['Main']['PICKLE_FILE']
     processes_list = f"{config['Main']['PROCESSES_LIST']} > {proc_file}"
     kill_command = config['Main']['KILL_COMMAND']
     process_name = config['Main']['PROCESS_NAME'].lower()
@@ -101,5 +101,3 @@ if __name__ == '__main__':
     p.get_current_processes()
     p.terminate_hang_processes()
     p.save_seen_processes()
-else:
-    print(__doc__)
