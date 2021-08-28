@@ -54,7 +54,8 @@ class ActiveProcesses:
         """
         current_processes = dict()
         returned_value = system(self.processes_list)
-        if returned_value:
+        if returned_value and returned_value != 256:
+            # code 256 means there are no active processes for the user
             logging.warning(f'Processes list terminated with error {returned_value}.')
             return returned_value
         with open(self.proc_file, 'r') as f:
