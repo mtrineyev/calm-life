@@ -45,10 +45,8 @@ class ActiveProcesses:
         try:
             with open(self.seen_proc_file, 'r') as f:
                 self.seen_processes = yaml.safe_load(f)
-            if not self.seen_processes:
-                raise FileNotFoundError
             logging.info(f'Read {len(self.seen_processes)} seen processes.')
-        except FileNotFoundError:
+        except (FileNotFoundError, TypeError):
             logging.warning(f'File "{self.seen_proc_file}" not found. Used empty one.')
             self.seen_processes = dict()
         return
