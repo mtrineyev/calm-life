@@ -1,0 +1,25 @@
+main:
+    # File for saving the current processes
+    cur_proc_file: processes.tmp
+    # File for saving the seen processes
+    seen_proc_file: processes.yaml
+    # OS command to show active processes
+    processes_list_command: ps -u user_name
+    # Name of the looking process
+    process_name: python
+    # OS command to kill selected process
+    kill_command: sudo kill -9
+    # Count of seen times after which the active task should be suspended
+    seen_times: 17
+
+logging:
+    # Leave it blank if you want to get logging to the console
+    file: calm-life.log
+    # CRITICAL = 50, ERROR = 40, WARNING = 30, INFO = 20, DEBUG = 10, NOTSET = 0
+    level: 20
+
+healthcheck:
+    # Leave it blank if you don't have the check url from https://healthcheck.com/
+    check_url:
+    # Slack group alert webhook, leave it blank if there is no Slack channel for alerting
+    slack_webhook:

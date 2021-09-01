@@ -3,22 +3,26 @@ Stop the process of hanging scraping jobs
 
 For detailed setup, deployment and run instructions see readme.md file
 
-© 2021 MediaMonitoringBot, written by Maksym Trineiev
+© 2021 MediaMonitoringBot, written by Maksym Trineyev
 """
 
-from configparser import ConfigParser
 import logging
 from os import system
-import pickle
 import requests
+import yaml
 
-config = ConfigParser()
-config.read('config.ini')
+try:
+    with open('config.yaml', 'r') as f_cfg:
+        cfg = yaml.safe_load(f_cfg)
+except FileNotFoundError:
+    logging.critical('config.yaml not found')
+    exit(1)
+
 logging.basicConfig(
-    filename=config['Logging']['FILE_NAME'],
+    filename=cfg['logging']['file'],
     format='%(asctime)s [%(name)s] %(levelname)s: %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',
-    level=int(config['Logging']['LEVEL']))
+    level=int(cfg['logging']['level']))
 
 
 class ActiveProcesses:
@@ -26,24 +30,24 @@ class ActiveProcesses:
     Get list of the currently running scrapy jobs (aka 'processes')
     and terminate old hanging ones
     """
-    proc_file = config['Main']['PROC_FILE']
-    pickle_file = config['Main']['PICKLE_FILE']
-    processes_list = f"{config['Main']['PROCESSES_LIST']} > {proc_file}"
-    kill_command = config['Main']['KILL_COMMAND']
-    process_name = config['Main']['PROCESS_NAME'].lower()
-    seen_times = config['Main'].getint('SEEN_TIMES')
-    heath_check_url = config['Misc']['HEALTH_CHECK_URL']
-    slack_webhook = config['Misc']['SLACK_MEDIAMONITORINGBOT_WEBHOOK']
+    proc_file = cfg['main']['cur_proc_file']
+    seen_proc_file = cfg['main']['seen_proc_file']
+    processes_list = f"{cfg['main']['processes_list_command']} > {proc_file}"
+    kill_command = cfg['main']['kill_command']
+    process_name = cfg['main']['process_name'].lower()
+    seen_times = cfg['main']['seen_times']
+    heath_check_url = cfg['healthcheck']['check_url']
+    slack_webhook = cfg['healthcheck']['slack_webhook']
 
     def __init__(self) -> None:
         if self.heath_check_url:
             requests.get(f'{self.heath_check_url}/start', timeout=5)
-        try:
-            with open(self.pickle_file, 'rb') as f:
-                self.seen_processes = pickle.load(f)
+        with open(self.seen_proc_file, 'r') as f:
+            self.seen_processes = yaml.safe_load(f)
+        if self.seen_processes:
             logging.info(f'Read {len(self.seen_processes)} seen processes.')
-        except FileNotFoundError:
-            logging.warning(f'File "{self.pickle_file}" not found. Used empty one.')
+        else:
+            logging.warning(f'File "{self.seen_proc_file}" not found. Used empty one.')
             self.seen_processes = dict()
         return
 
@@ -86,12 +90,11 @@ class ActiveProcesses:
 
     def save_seen_processes(self) -> None:
         """
-        Save count of seen processes
-        @return: None
+        Save count of the seen processes
         """
         logging.info(f'Saving {len(self.seen_processes)} current processes.')
-        with open(self.pickle_file, 'wb') as f:
-            pickle.dump(self.seen_processes, f)
+        with open(self.seen_proc_file, 'w') as f:
+            yaml.dump(self.seen_processes, f)
         if self.heath_check_url:
             requests.get(self.heath_check_url)
         return
