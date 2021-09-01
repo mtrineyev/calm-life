@@ -42,11 +42,13 @@ class ActiveProcesses:
     def __init__(self) -> None:
         if self.heath_check_url:
             requests.get(f'{self.heath_check_url}/start', timeout=5)
-        with open(self.seen_proc_file, 'r') as f:
-            self.seen_processes = yaml.safe_load(f)
-        if self.seen_processes:
+        try:
+            with open(self.seen_proc_file, 'r') as f:
+                self.seen_processes = yaml.safe_load(f)
+            if not self.seen_processes:
+                raise FileNotFoundError
             logging.info(f'Read {len(self.seen_processes)} seen processes.')
-        else:
+        except FileNotFoundError:
             logging.warning(f'File "{self.seen_proc_file}" not found. Used empty one.')
             self.seen_processes = dict()
         return
