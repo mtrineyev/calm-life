@@ -83,7 +83,14 @@ class ActiveProcesses:
                 if returned_value:
                     logging.error(f'Can\'t kill PID {key}.')
                 else:
-                    logging.warning(f'Killed process with PID {key}.')
+                    msg = f'Killed process with PID {key}.'
+                    logging.warning(msg)
+                    if self.slack_webhook:
+                        requests.post(self.slack_webhook, json={
+                            'username': 'Frozen buckets auto-killer',
+                            'icon_emoji': ':skull:',
+                            'text': msg
+                        })
                     self.seen_processes[key] = 0
         self.seen_processes = {k: v for k, v in self.seen_processes.items() if v}
         return
