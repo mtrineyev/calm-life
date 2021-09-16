@@ -4,15 +4,21 @@ main:
     # File for saving the seen processes
     seen_proc_file: processes.yaml
     # OS command to show active processes
-    processes_list_command: ps -u user_name
+    processes_list_command: ps -au -U user_name
+    # Number of column with process name (from 1 to ...)
+    process_name_column_number: 11
     # Name of the looking process
     process_name: python
+    # Number of column with PID (from 1 to ...)
+    pid_column_number: 2
+    # Number of column with bucket number (from 1 to ...)
+    bucket_column_number: 14
     # OS command to kill selected process
     kill_command: sudo kill -9
     # Count of seen times after which the active task should be suspended
-    seen_times: 17
+    seen_times: 15
     # Name of the server
-    server_name: no_name
+    server_name: server_name
 
 logging:
     # Leave it blank if you want to get logging to the console
