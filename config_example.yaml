@@ -11,6 +11,8 @@ main:
     kill_command: sudo kill -9
     # Count of seen times after which the active task should be suspended
     seen_times: 17
+    # Name of the server
+    server_name: no_name
 
 logging:
     # Leave it blank if you want to get logging to the console

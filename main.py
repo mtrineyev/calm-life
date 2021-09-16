@@ -36,6 +36,7 @@ class ActiveProcesses:
     kill_command = cfg['main']['kill_command']
     process_name = cfg['main']['process_name'].lower()
     seen_times = cfg['main']['seen_times']
+    server_name = cfg['main']['server_name']
     heath_check_url = cfg['healthcheck']['check_url']
     slack_webhook = cfg['healthcheck']['slack_webhook']
 
@@ -83,7 +84,7 @@ class ActiveProcesses:
                 if returned_value:
                     logging.error(f'Can\'t kill PID {key}.')
                 else:
-                    msg = f'Killed process with PID {key}.'
+                    msg = f'Killed process with PID {key} on {self.server_name}.'
                     logging.warning(msg)
                     if self.slack_webhook:
                         requests.post(self.slack_webhook, json={
